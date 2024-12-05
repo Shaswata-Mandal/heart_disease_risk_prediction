@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Disease Prediction</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+    <header>
+        <div id="header">
+
+            <div id="name"><span>Aura-</span><span style="color:rgb(76, 87, 235)">Loom</span></div>
+
+            <div id="header_content">
+
+                <ul>
+                    <li><a href="#box1">Predictor</a></li>
+                    <li><a href="#box3">Blog</a></li>
+                    <li><a href="#box6">Services</a></li>
+                    <li><a href="#box2">About</a></li>
+                    <li><a href="#box7">Contact</a></li>
+                </ul>
+                
+            </div>
+
+        </div>
+    </header>
+
+
+    <main>
+
+        <div id="box1">
+
+            <div id="left">
+
+                <div class="form-container">
+                    <h2>Heart Disease Prediction</h2>
+            
+                    <form action="/predict" method="post">
+                        <!-- Age -->
+                        <label for="age">Age (in years):</label>
+                        <input type="number" id="age" name="age" min="1" max="120" required><br><br>
+                
+                        <!-- Sex -->
+                        <label for="sex">Sex:</label>
+                        <select id="sex" name="sex" required>
+                            <option value="1">Male</option>
+                            <option value="0">Female</option>
+                        </select><br><br>
+                
+                        <!-- Chest Pain Type -->
+                        <label for="chest_pain">Chest Pain Type:</label>
+                        <select id="chest_pain" name="chest_pain" required>
+                            <option value="0">Type 0</option>
+                            <option value="1">Type 1</option>
+                            <option value="2">Type 2</option>
+                            <option value="3">Type 3</option>
+                        </select><br><br>
+                
+                        <!-- Resting Blood Pressure -->
+                        <label for="resting_bp">Resting Blood Pressure (mm Hg):</label>
+                        <input type="number" id="resting_bp" name="resting_bp" min="94" max="200" required><br><br>
+                
+                        <!-- Serum Cholesterol -->
+                        <label for="cholesterol">Serum Cholesterol (mg/dl):</label>
+                        <input type="number" id="cholesterol" name="cholesterol" min="126" max="564" required><br><br>
+                
+                        <!-- Fasting Blood Sugar -->
+                        <label for="fasting_bs">Fasting Blood Sugar:</label>
+                        <select id="fasting_bs" name="fasting_bs" required>
+                            <option value="1">True</option>
+                            <option value="0">False</option>
+                        </select><br><br>
+                
+                        <!-- Resting Electrocardiographic Results -->
+                        <label for="rest_ecg">Resting ECG Results:</label>
+                        <select id="rest_ecg" name="rest_ecg" required>
+                            <option value="0">Normal</option>
+                            <option value="1">Abnormality</option>
+                            <option value="2">Probable Hypertrophy</option>
+                        </select><br><br>
+                
+                        <!-- Maximum Heart Rate Achieved -->
+                        <label for="max_hr">Maximum Heart Rate Achieved:</label>
+                        <input type="number" id="max_hr" name="max_hr" min="71" max="202" required><br><br>
+                
+                        <!-- Exercise-Induced Angina -->
+                        <label for="ex_angina">Exercise-Induced Angina:</label>
+                        <select id="ex_angina" name="ex_angina" required>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select><br><br>
+                
+                        <!-- ST Depression -->
+                        <label for="st_depression">ST Depression (relative to rest):</label>
+                        <input type="number" id="st_depression" name="st_depression" step="0.1" min="0" max="6.2" required><br><br>
+                
+                        <!-- Slope of the Peak Exercise ST Segment -->
+                        <label for="st_slope">Slope of Peak Exercise ST Segment:</label>
+                        <select id="st_slope" name="st_slope" required>
+                            <option value="0">Upsloping</option>
+                            <option value="1">Flat</option>
+                            <option value="2">Downsloping</option>
+                        </select><br><br>
+                
+                        <!-- Number of Major Vessels Colored by Fluoroscopy -->
+                        <label for="num_vessels">Number of Major Vessels (0-3):</label>
+                        <select id="num_vessels" name="num_vessels" required>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select><br><br>
+                
+                        <!-- Thalassemia -->
+                        <label for="thal">Thalassemia:</label>
+                        <select id="thal" name="thal" required>
+                            <option value="0">Normal</option>
+                            <option value="1">Fixed Defect</option>
+                            <option value="2">Reversible Defect</option>
+                        </select><br><br>
+                
+                        <button type="submit">Submit</button>
+                    </form>
+            
+            
+            
+                    {% if prediction_text %}
+                    <div class="result" style="background-color: {% if 'No Heart Disease' in prediction_text %}green{% else %}red{% endif %};">
+                        {{ prediction_text }}
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <!-- Popup warning -->
+            <div class="popup-container" id="warningPopup">
+                <h2>Warning</h2>
+                <p>Your analysis indicates that further action might be necessary. Consider consulting a doctor.</p>
+                <p>Nearby Doctors:</p>
+                <ul style="list-style-type: none; padding: 0; margin: 0;">
+                    <li><strong>Dr. John Smith</strong> - General Physician, 2 km away | Phone: +1-234-567-8901</li>
+                    <li><strong>Dr. Emily Johnson</strong> - Cardiologist, 3.5 km away | Phone: +1-234-567-8902</li>
+                    <li><strong>Dr. Michael Brown</strong> - Psychiatrist, 4 km away | Phone: +1-234-567-8903</li>
+                    <li><strong>Dr. Linda Williams</strong> - Pediatrician, 5 km away | Phone: +1-234-567-8904</li>
+                    <li><strong>Dr. Daniel Garcia</strong> - Orthopedic Surgeon, 3 km away | Phone: +1-234-567-8905</li>
+                    <li><strong>Dr. Sarah Martinez</strong> - Dermatologist, 2.8 km away | Phone: +1-234-567-8906</li>
+                    <li><strong>Dr. Robert Lee</strong> - Neurologist, 6 km away | Phone: +1-234-567-8907</li>
+                    <li><strong>Dr. Karen Taylor</strong> - Gynecologist, 3.2 km away | Phone: +1-234-567-8908</li>
+                    <li><strong>Dr. Christopher Harris</strong> - Endocrinologist, 4.5 km away | Phone: +1-234-567-8909</li>
+                    <li><strong>Dr. Jessica Walker</strong> - ENT Specialist, 5.5 km away | Phone: +1-234-567-8910</li>
+                </ul>
+                <button class="close-btn" onclick="closePopup()">Close</button>
+            </div>
+            <div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+            <div id="right"></div>
+
+        </div>
+
+        <div id="box3">
+
+            <div id="a1"><span style="color:black">How It </span> <span style="margin-left:8px; color:rgba(255, 184, 43, 0.948)">Works</span></div>
+
+            <div id="a2">Discover how our sentiment analysis model transforms your input into actionable insights. By combining advanced machine learning techniques with a carefully curated dataset, our model ensures accurate and reliable results in seconds!</div>
+
+            <div id="a3">
+
+                <div class="b1">
+
+                    <div class="boxes">
+                        <div class="c1logo"><i class="fa-brands fa-html5 fa-2xl" style="color: #ffffff;"></i></div> 
+                        <div class="c2name">Input from User</div> 
+                        <div class="c3lorem">The user provides 13 health parameters like age, blood pressure, and cholesterol via a form.</div> 
+                    </div>
+
+                    <div class="boxes">
+                        <div class="c1logo"><i class="fa-brands fa-facebook-f fa-2xl" style="color: #ffffff;"></i></div> 
+                        <div class="c2name">Data Processing</div> 
+                        <div class="c3lorem"> Inputs are standardized to match the training data format using a pre-fitted scaler.</div>
+                    </div>
+
+                    <div class="boxes">
+                        <div class="c1logo"><i class="fa-solid fa-video fa-xl" style="color: #ffffff;"></i></div> 
+                        <div class="c2name">Machine Learning Model</div> 
+                        <div class="c3lorem">A trained classification model evaluates the processed inputs.</div>
+                    </div>
+
+                </div>
+
+                <div class="b1">
+
+                    <div class="boxes">
+                        <div class="c1logo"><i class="fa-solid fa-briefcase fa-xl" style="color: #ffffff;"></i></div> 
+                        <div class="c2name">Prediction Generation</div> 
+                        <div class="c3lorem">The model predicts the likelihood of heart disease (risk or no risk).</div>
+                    </div>
+                    <div class="boxes">
+                        <div class="c1logo"><i class="fa-solid fa-code fa-xl" style="color: #ffffff;"></i></div> 
+                        <div class="c2name">Results Display</div> 
+                        <div class="c3lorem">The prediction is shown on the web page with user-friendly messages.</div>
+                    </div>
+                    <div class="boxes">
+                        <div class="c1logo"><i class="fa-solid fa-phone fa-xl" style="color: #ffffff;"></i></div> 
+                        <div class="c2name">Real-Time Feedback</div> 
+                        <div class="c3lorem">Users get instant results and warnings if necessary for health risks</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="box6">
+
+            <div id="a1">Other<span style="margin-left:8px; color:rgba(255, 184, 43, 0.948);">Services</span></div>
+
+            <div id="a2">Our expertise goes beyond sentiment analysis. We provide a range of advanced machine learning solutions designed to solve real-world problems. From healthcare to everyday applications, explore some of our key offerings.</div>
+
+            <div id="a3">
+
+                <div class="b1">
+
+                    <div class="images" style="background-image: url('/static/cardiac.jpeg');"></div>
+
+                    <div class="content">
+
+                        <div class="content1"><i class="fa-regular fa-clock fa-sm" style="color: rgba(255, 184, 43, 0.948);"></i> July31, 2023 <span style="color:white; font-weight: 700;">| Category: Healthcare AI</span></div>
+                        <div class="content2">Cardiac Arrest Prediction System</div>
+                        <div class="content3">Our cardiac arrest prediction model leverages patient data to identify potential risks early, enabling timely medical intervention. This system provides critical support for healthcare professionals.</div>
+                        <div class="content4">Read More</div>
+
+                    </div>
+
+                </div>
+
+                <div class="b1">
+
+                    <div class="images" style="background-image: url('/static/customer.png');"></div>
+
+                    <div class="content">
+
+                        <div class="content1"><i class="fa-regular fa-clock fa-sm" style="color: rgba(255, 184, 43, 0.948);"></i> July31, 2023 <span style="color:white; font-weight: 700;">| Category: Business Analytics</span></div>
+                        <div class="content2">Customer Feedback Analysis Tool</div>
+                        <div class="content3">Analyze customer feedback from multiple channels to identify trends, detect satisfaction levels, and improve business outcomes. A powerful tool for enhancing customer experience.</div>
+                        <div class="content4">Read More</div>
+
+                    </div>
+
+                </div>
+
+                <div class="b1">
+
+                    <div class="images" style="background-image: url('/static/detect.jpeg');"></div>
+
+                    <div class="content">
+
+                        <div class="content1"><i class="fa-regular fa-clock fa-sm" style="color: rgba(255, 184, 43, 0.948);"></i> July31, 2023 <span style="color:white; font-weight: 700;">| Category: Cybersecurity</span></div>
+                        <div class="content2">Spam Detection and Filtering System</div>
+                        <div class="content3">Our spam detection system accurately identifies and filters unwanted emails and messages, ensuring secure and clutter-free communication for individuals and businesses.</div>
+                        <div class="content4">Read More</div>
+
+                    </div>
+
+                </div>
+          
+            </div>
+
+        </div>
+
+        <div id="box2">
+
+            <div id="left"><div id="leftinner"></div></div>
+
+            <div id="right">
+
+                <div id="a1"><span>About</span><span style="margin-left:8px; color:rgba(255, 184, 43, 0.948)">Us</span></div>
+
+                <div id="a2">We are a tech-driven company dedicated to revolutionizing healthcare through innovative solutions. Our heart disease prediction model is a prime example of how we merge cutting-edge technology with healthcare to empower individuals and professionals. By providing real-time, data-driven insights, we aim to simplify complex health evaluations, making them accessible to everyone.
+                <br><br><br>
+                    Our mission is to harness the power of machine learning and data science to address pressing health concerns. Through this project, we strive to promote early detection and prevention of cardiovascular diseases, fostering healthier lives and proactive health management.
+                    <br><br><br>
+                    Beyond this model, we focus on creating scalable and impactful tools that bridge the gap between technology and healthcare. Our vision is a future where advanced analytics help individuals understand and manage their health more effectively.
+                    <br><br><br>
+                    We believe in creating solutions that are not just innovative but also user-friendly and trustworthy. Partner with us in our journey to make healthcare smarter, more efficient, and truly patient-centric.
+                    <br><br><br>
+                    Note: The prediction made by the model is just indicative and cannot be considered as final for diagnosis.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div id="box7">
+
+            <div id="a1"> <span style="color:black">Contact</span>  <span style="margin-left:8px; color:rgba(255, 184, 43, 0.948)">Us</span></div>
+
+            <div id="a2">We’d love to hear from you! Whether you have questions about our sentiment analysis model, need assistance, or want to explore collaborations, feel free to reach out. Connect with us on LinkedIn or Instagram, or drop us a message using the contact information provided below. Let’s work together to bring innovation to life!</div>
+
+            <div class="contact-container">
+                <!-- Member 1 -->
+                <div class="contact-card">
+                    <h2>Shaswata Mandal</h2>
+                    <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/member1" target="_blank">Profile</a></p>
+                    <p><strong>Instagram:</strong> <a href="https://instagram.com/member1" target="_blank">@member1</a></p>
+                    <p><strong>Phone:</strong> <span style="color:white">Contact</span></p>
+                    <p><strong>College ID:</strong> <span style="color:white">Contact</span></p>
+                </div>
+    
+                <!-- Member 2 -->
+                <div class="contact-card">
+                    <h2>Rishabh Nayak</h2>
+                    <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/member2" target="_blank">Profile</a></p>
+                    <p><strong>Instagram:</strong> <a href="https://instagram.com/member2" target="_blank">@member2</a></p>
+                    <p><strong>Phone:</strong> <span style="color:white">Contact</span></p>
+                    <p><strong>College ID:</strong> <span style="color:white">Contact</span></p>
+                </div>
+    
+                <!-- Member 3 -->
+                <div class="contact-card">
+                    <h2>Jaabir Islam</h2>
+                    <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/member3" target="_blank">Profile</a></p>
+                    <p><strong>Instagram:</strong> <a href="https://instagram.com/member3" target="_blank">@member3</a></p>
+                    <p><strong>Phone:</strong> <span style="color:white">Contact</span></p>
+                    <p><strong>College ID:</strong> <span style="color:white">Contact</span></p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <div id="footer">Copyright &copy; 2024 Aura-Loom | All Rights Reserved</div>
+    </footer>
+
+    <!-- JavaScript for popup -->
+
+
+    <script>
+        function showPopup() {
+            document.getElementById('warningPopup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('warningPopup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // Show popup if the server indicates a warning
+        {% if show_warning %}
+        showPopup();
+        {% endif %}
+    </script>
+
+    
+</body>
+</html>
